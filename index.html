@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Password Generator</title>
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-dark: #3730a3;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.2s ease;
+        }
+
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background-color: var(--gray-50);
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+
+        section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        section:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 5px;
+            -webkit-appearance: none;
+            background: var(--gray-300);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .length-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #0da271;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Password display */
+        .password-display {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-text {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            border: 2px dashed var(--gray-300);
+            word-break: break-all;
+            user-select: all;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .password-text:hover {
+            border-color: var(--primary-light);
+            background: var(--gray-50);
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 0.5rem;
+            padding: 0.5rem;
+            background: var(--gray-200);
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--gray-300);
+        }
+
+        /* Strength meter */
+        .strength-meter {
+            height: 10px;
+            width: 100%;
+            background: var(--gray-200);
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .strength-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .crack-time {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .crack-time strong {
+            color: var(--primary);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 0.75rem 1.5rem;
+            background: var(--gray-800);
+            color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .checkbox-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Animation for generated password */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Secure Password Generator</h1>
+            <h2>Create strong passwords & test yours — fast.</h2>
+        </header>
+
+        <main>
+            <section id="generator">
+                <h3>Choose a vibe, get a lock.</h3>
+                
+                <div class="form-group">
+                    <label for="word">Word or phrase (optional):</label>
+                    <input type="text" id="word" placeholder="e.g., dragonfly42" aria-describedby="wordHelp">
+                    <small id="wordHelp" style="color: var(--gray-500); display: block; margin-top: 0.5rem;">
+                        Add a memorable word to include in your password
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="number">Number (optional):</label>
+                    <input type="number" id="number" placeholder="e.g., 1990">
+                </div>
+                
+                <div class="form-group">
+                    <label for="symbols">Custom symbols (optional):</label>
+                    <input type="text" id="symbols" placeholder="e.g., !@#$" aria-describedby="symbolsHelp">
+                    <small id="symbolsHelp" style="color: var(--gray-500); display: block; margin-top: 0.5rem;">
+                        Add special characters to include (if symbols checkbox is checked)
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="length">Password length: <span class="length-value" id="lengthValue">16</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="length" min="4" max="64" value="16">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Include:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="lowercase" checked>
+                            <label for="lowercase">Lowercase (a-z)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="uppercase" checked>
+                            <label for="uppercase">Uppercase (A-Z)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="digits" checked>
+                            <label for="digits">Digits (0-9)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="symbolsCheck" checked>
+                            <label for="symbolsCheck">Symbols (!@#...)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="generateBtn" class="btn">Generate Password</button>
+            </section>
+            
+            <section id="password-result">
+                <h3>Your Secure Password</h3>
+                
+                <div class="password-display">
+                    <output id="passwordOutput" class="password-text" for="generateBtn">Click generate to create a password</output>
+                    <button id="copyBtn" class="copy-btn" aria-label="Copy password to clipboard">📋</button>
+                </div>
+                
+                <div class="strength-meter">
+                    <div id="strengthFill" class="strength-fill"></div>
+                </div>
+                
+                <div class="strength-labels">
+                    <span>Weak</span>
+                    <span>Fair</span>
+                    <span>Good</span>
+                    <span>Strong</span>
+                    <span>Very Strong</span>
+                </div>
+                
+                <p id="strengthLabel">Password strength will appear here</p>
+                
+                <div class="crack-time">
+                    <p id="crackTimeOnline">Online attack: —</p>
+                    <p id="crackTimeOffline">Offline attack: —</p>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="regenerateBtn" class="btn btn-secondary">Generate Another</button>
+                    <button id="testPasswordBtn" class="btn">Test Your Password</button>
+                </div>
+            </section>
+            
+            <section id="password-tester">
+                <h3>Test Your Password</h3>
+                
+                <div class="form-group">
+                    <label for="testPassword">Enter a password to test:</label>
+                    <input type="text" id="testPassword" placeholder="Paste your password here">
+                </div>
+                
+                <button id="testBtn" class="btn">Test Password</button>
+                
+                <div id="testResults" style="display: none;">
+                    <div class="strength-meter">
+                        <div id="testStrengthFill" class="strength-fill"></div>
+                    </div>
+                    
+                    <div class="strength-labels">
+                        <span>Weak</span>
+                        <span>Fair</span>
+                        <span>Good</span>
+                        <span>Strong</span>
+                        <span>Very Strong</span>
+                    </div>
+                    
+                    <p id="testStrengthLabel">Password strength will appear here</p>
+                    
+                    <div class="crack-time">
+                        <p id="testCrackTimeOnline">Online attack: —</p>
+                        <p id="testCrackTimeOffline">Offline attack: —</p>
+                    </div>
+                    
+                    <div id="suggestions" style="margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: var(--radius);">
+                        <h4>Suggestions to improve:</h4>
+                        <ul id="suggestionList" style="margin-top: 0.5rem; padding-left: 1.5rem;"></ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Everything runs locally in your browser — nothing is sent anywhere. 🔒</p>
+        </footer>
+    </div>
+    
+    <div id="toast" class="toast">Password copied to clipboard!</div>
+    
+    <script>
+        // DOM Elements
+        const wordInput = document.getElementById('word');
+        const numberInput = document.getElementById('number');
+        const symbolsInput = document.getElementById('symbols');
+        const lengthInput = document.getElementById('length');
+        const lengthValue = document.getElementById('lengthValue');
+        const lowercaseCheck = document.getElementById('lowercase');
+        const uppercaseCheck = document.getElementById('uppercase');
+        const digitsCheck = document.getElementById('digits');
+        const symbolsCheck = document.getElementById('symbolsCheck');
+        const generateBtn = document.getElementById('generateBtn');
+        const passwordOutput = document.getElementById('passwordOutput');
+        const copyBtn = document.getElementById('copyBtn');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthLabel = document.getElementById('strengthLabel');
+        const crackTimeOnline = document.getElementById('crackTimeOnline');
+        const crackTimeOffline = document.getElementById('crackTimeOffline');
+        const regenerateBtn = document.getElementById('regenerateBtn');
+        const testPasswordBtn = document.getElementById('testPasswordBtn');
+        const testPasswordInput = document.getElementById('testPassword');
+        const testBtn = document.getElementById('testBtn');
+        const testResults = document.getElementById('testResults');
+        const testStrengthFill = document.getElementById('testStrengthFill');
+        const testStrengthLabel = document.getElementById('testStrengthLabel');
+        const testCrackTimeOnline = document.getElementById('testCrackTimeOnline');
+        const testCrackTimeOffline = document.getElementById('testCrackTimeOffline');
+        const suggestionList = document.getElementById('suggestionList');
+        const toast = document.getElementById('toast');
+
+        // Character sets
+        const charSets = {
+            lowercase: 'abcdefghijklmnopqrstuvwxyz',
+            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            digits: '0123456789',
+            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        // Initialize the app
+       
